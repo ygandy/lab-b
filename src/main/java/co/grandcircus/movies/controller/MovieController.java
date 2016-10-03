@@ -23,18 +23,17 @@ import co.grandcircus.movies.model.Movie;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value = "/movies")
 public class MovieController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
-	
+
 	@Autowired
 	private MovieDao movieDao;
-	
+
 	/**
 	 * List all movies
 	 */
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "/movies", method = RequestMethod.GET)
 	public String listMovies(Model model, @RequestParam(value="category", required=false) String category) {
 		List<Movie> movies;
 		if (category != null && movieDao.isValidCategory(category)) {
@@ -43,17 +42,17 @@ public class MovieController {
 		} else {
 			movies = movieDao.getAllMovies();
 		}
-		
+
 		model.addAttribute("movies",movies);
 
 		logger.info("/movies -> movie-list.jsp");
 		return "movie-list";
 	}
-	
+
 	/**
 	 * Display one movie
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/movies/{id}", method = RequestMethod.GET)
 	public String displayMovie(@PathVariable int id, Model model) {
 		model.addAttribute("id", id);
 		model.addAttribute("movie", movieDao.getMovie(id));
@@ -61,53 +60,53 @@ public class MovieController {
 		logger.info("GET /movies/" + id + " -> movie.jsp");
 		return "movie";
 	}
-	
+
 	/**
 	 * Save one movie
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/movies/{id}", method = RequestMethod.POST)
 	public String saveMovie(@PathVariable int id, Movie movie, Model model) {
 		movieDao.updateMovie(id, movie);
 		model.addAttribute("id", id);
 		model.addAttribute("movie", movie);
-		
+
 		logger.info("POST /movies/" + id + " -> movie.jsp");
 		return "movie";
 	}
-	
+
 	/**
 	 * Delete one movie
 	 */
-	@RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+	@RequestMapping(value = "/movies/{id}/delete", method = RequestMethod.POST)
 	public String deleteMovie(@PathVariable int id, Model model) {
 		movieDao.deleteMovie(id);
 		model.asMap().clear();
-		
+
 		logger.info("POST /movies/" + id + "/delete -> redirect to /movies");
 		return "redirect:/movies";
 	}
-	
+
 	/**
 	 * Display one movie
 	 */
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/movies/create", method = RequestMethod.GET)
 	public String createMovieForm(Model model) {
 		model.addAttribute("movie", new Movie());
-		
+
 		logger.info("GET /movies/create -> movie-create.jsp");
 		return "movie-create";
 	}
-	
+
 	/**
 	 * Save new movie
 	 */
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/movies/create", method = RequestMethod.POST)
 	public String createMovie(Movie movie, Model model) {
 		movieDao.addMovie(movie);
 		model.asMap().clear();
-		
+
 		logger.info("POST /movies/create -> redirect to /movies");
 		return "redirect:/movies";
 	}
-	
+
 }
