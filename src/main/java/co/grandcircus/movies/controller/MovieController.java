@@ -31,7 +31,7 @@ public class MovieController {
 	private MovieDao movieDao;
 
 	/**
-	 * List all movies
+	 * List (READ) all movies
 	 */
 	@RequestMapping(value = "/movies", method = RequestMethod.GET)
 	public String listMovies(Model model, @RequestParam(value="category", required=false) String category) {
@@ -62,7 +62,7 @@ public class MovieController {
 	}
 
 	/**
-	 * Save one movie
+	 * Save one movie (UPDATE)
 	 */
 	@RequestMapping(value = "/movies/{id}", method = RequestMethod.POST)
 	public String saveMovie(@PathVariable int id, Movie movie, Model model) {
@@ -75,7 +75,8 @@ public class MovieController {
 	}
 
 	/**
-	 * Delete one movie
+	 * Delete one movie (DELETE)
+	 * 
 	 */
 	@RequestMapping(value = "/movies/{id}/delete", method = RequestMethod.POST)
 	public String deleteMovie(@PathVariable int id, Model model) {
@@ -87,7 +88,7 @@ public class MovieController {
 	}
 
 	/**
-	 * Display one movie
+	 * Display GET one movie to populate CREATE form
 	 */
 	@RequestMapping(value = "/movies/create", method = RequestMethod.GET)
 	public String createMovieForm(Model model) {
@@ -98,7 +99,7 @@ public class MovieController {
 	}
 
 	/**
-	 * Save new movie
+	 * Save new movie (CREATE)
 	 */
 	@RequestMapping(value = "/movies/create", method = RequestMethod.POST)
 	public String createMovie(Movie movie, Model model) {
